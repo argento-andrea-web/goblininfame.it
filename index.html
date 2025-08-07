@@ -3,61 +3,136 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goblin Infame</title>
+  <title>Goblin Infame - Neon: La luce sporca della verità</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M69PVBECK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5M69PVBECK');
+  </script>
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background-color: #0f0; /* verde */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      color: #000;
-    }
-    .container {
-      display: flex;
-      align-items: center;
-      max-width: 90%;
-    }
-    .container img {
-      max-width: 40vw;
-      height: auto;
-      border: 4px solid #444;
-      border-radius: 10px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-    }
-    .text {
-      margin-left: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 40vh;
-    }
-    .text h1 {
-      font-size: 3rem;
-      margin: 0;
-    }
-    .text p {
-      font-size: 1.5rem;
-      font-style: italic;
-      margin: 1rem 0;
-    }
-    .signature {
-      font-size: 1rem;
-      text-align: right;
-    }
+    body { margin: 0; padding: 0; background-color: #0f0; font-family: Arial, sans-serif; color: #000; display: flex; flex-direction: column; align-items: center; }
+    header { width: 100%; text-align: center; padding: 2rem 1rem; background-color: #0f0; }
+    #cover { max-width: 50%; height: auto; border: 4px solid #444; border-radius: 8px; box-shadow: 0 6px 12px rgba(0,0,0,0.5); cursor: pointer; }
+    #prompt { margin-top: 1rem; font-size: 1.2rem; }
+    #play-btn, #share-btn { margin-top: 1rem; padding: 0.5rem 1rem; font-size: 1rem; border: none; border-radius: 4px; cursor: pointer; background: rgba(255,255,255,0.8); color: #333; }
+    #visit-counter { background: rgba(255,255,255,0.8); border: 1px solid #a0eab2; border-radius: 8px; padding: 0.5rem 1rem; margin: 1rem 0; font-size: 1rem; color: #333; }
+    .panel { background: #f9f9f9; border: 1px solid #a0eab2; border-radius: 8px; padding: 1rem; margin: 2rem 0; width: 90%; max-width: 800px; }
+    #reviews-list .review { border-bottom: 1px solid #ddd; padding: 0.5rem 0; }
+    #reviews-list .review:last-child { border-bottom: none; }
+    .btn { background: #a0eab2; border: none; border-radius: 4px; padding: 0.5rem 1rem; cursor: pointer; color: #000; }
+    .btn:hover { filter: brightness(0.9); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="goblin.png" alt="Goblin Infame" />
-    <div class="text">
-      <h1>Goblin Infame</h1>
-      <div class="signature">A.A.</div>
-      <p>“In ogni ombra risplende una speranza: tutto è possibile.”</p>
-    </div>
-  </div>
+  <header>
+    <img id="cover" src="cover.png" alt="Copertina di Neon" />
+    <div id="prompt">Clicca sulla copertina per aprire <strong>Neon - La luce sporca della verità</strong></div>
+  </header>
+
+  <section id="story" class="panel"></section>
+  <button id="play-btn" style="display:none;">▶️ Ascolta la storia</button>
+  <button id="share-btn" style="display:none;">📲 Condividi</button>
+  <div id="visit-counter"></div>
+
+  <section id="reviews-section" class="panel">
+    <h2>Lascia la tua recensione</h2>
+    <div id="reviews-list"></div>
+    <form id="review-form">
+      <input type="text" id="reviewer" placeholder="Il tuo nome" required style="width:100%;padding:0.5rem;margin:0.5rem 0;" />
+      <textarea id="review-text" rows="3" placeholder="Scrivi la recensione..." required style="width:100%;padding:0.5rem;"></textarea>
+      <button type="submit" class="btn">Invia</button>
+    </form>
+  </section>
+
+  <footer>&copy; 2025 A.A.</footer>
+
+  <script>
+    // Testo pagine
+    const pagesText = [
+      `Neon - La luce sporca della verità<br>Autore: A.A.<br><strong>Capitolo 1 – Il Silenzio</strong>`,
+      `Mi chiamo Riven. Sono a Bologna, una città ferita ma in piedi, come me...`,
+      `Le vie un tempo brulicanti ora sono crepe di disperazione...`,
+      `Dieci anni fa, il destino ha voltato le spalle all’umanità...`,
+      `In questo cielo incandescente, ho imparato che resistere è un atto di amore...`
+    ];
+    let current = 0;
+    const cover = document.getElementById('cover');
+    const prompt = document.getElementById('prompt');
+    const story = document.getElementById('story');
+    const playBtn = document.getElementById('play-btn');
+    const shareBtn = document.getElementById('share-btn');
+
+    // Contatore visite globale in localStorage
+    function renderCounter() {
+      let count = parseInt(localStorage.getItem('visitCount') || '0', 10);
+      count++;
+      localStorage.setItem('visitCount', count);
+      document.getElementById('visit-counter').textContent = `Visite totali: ${count}`;
+    }
+    renderCounter();
+
+    // Recensioni in locale
+    function getReviews() { return JSON.parse(localStorage.getItem('reviews') || '[]'); }
+    function saveReviews(list) { localStorage.setItem('reviews', JSON.stringify(list)); }
+    function renderReviews() {
+      const container = document.getElementById('reviews-list'); container.innerHTML = '';
+      getReviews().forEach(r => {
+        const div = document.createElement('div'); div.className = 'review';
+        div.innerHTML = `<strong>${r.name}</strong> <em>(${r.date})</em><p>${r.text}</p>`;
+        container.appendChild(div);
+      });
+    }
+    renderReviews();
+    document.getElementById('review-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('reviewer').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+      if (name && text) {
+        const reviews = getReviews(); reviews.unshift({ name, text, date: new Date().toLocaleString() });
+        saveReviews(reviews); renderReviews(); e.target.reset();
+      }
+    });
+
+    // Click copertina -> mostra pagine
+    cover.addEventListener('click', () => {
+      cover.style.display = 'none'; prompt.style.display = 'none'; story.style.display = 'block';
+      playBtn.style.display = 'inline-block'; shareBtn.style.display = 'inline-block';
+      story.innerHTML = `<p>${pagesText[0]}</p>`;
+      const interval = setInterval(() => {
+        current++;
+        if (current < pagesText.length) {
+          story.innerHTML = `<p>${pagesText[current]}</p>`;
+        } else clearInterval(interval);
+      }, 4000);
+    });
+
+    // Sintesi vocale con voce italiana preferita
+    function selectVoice() {
+      const voices = speechSynthesis.getVoices().filter(v => v.lang === 'it-IT');
+      return voices.find(v => /female|Femminile/i.test(v.name)) || voices[0];
+    }
+    playBtn.addEventListener('click', () => {
+      speechSynthesis.cancel(); playBtn.disabled = true;
+      const utterance = new SpeechSynthesisUtterance(pagesText.join(' '));
+      utterance.lang = 'it-IT'; utterance.voice = selectVoice();
+      utterance.rate = 1; utterance.pitch = 1;
+      utterance.onend = () => { playBtn.disabled = false; };
+      speechSynthesis.speak(utterance);
+    });
+
+    // Condivisione social via Web Share API
+    shareBtn.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: window.location.href });
+      } else {
+        alert('La condivisione non è supportata sul tuo dispositivo.');
+      }
+    });
+  </script>
 </body>
 </html>
