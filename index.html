@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goblin Infame - Neon: La luce sporca della verità</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neon - La luce sporca della verità</title>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M69PVBECK"></script>
@@ -15,122 +15,227 @@
   </script>
 
   <style>
-    body { margin: 0; padding: 0; background-color: #0f0; font-family: Arial, sans-serif; color: #000; display: flex; flex-direction: column; align-items: center; }
-    header { width: 100%; text-align: center; padding: 2rem 1rem; background-color: #0f0; }
-    #cover { max-width: 50%; height: auto; border: 4px solid #444; border-radius: 8px; box-shadow: 0 6px 12px rgba(0,0,0,0.5); cursor: pointer; }
-    #prompt { margin-top: 1rem; font-size: 1.2rem; }
-    #play-btn, #share-btn { margin-top: 1rem; padding: 0.5rem 1rem; font-size: 1rem; border: none; border-radius: 4px; cursor: pointer; background: rgba(255,255,255,0.8); color: #333; }
-    #visit-counter { background: rgba(255,255,255,0.8); border: 1px solid #a0eab2; border-radius: 8px; padding: 0.5rem 1rem; margin: 1rem 0; font-size: 1rem; color: #333; }
-    .panel { background: #f9f9f9; border: 1px solid #a0eab2; border-radius: 8px; padding: 1rem; margin: 2rem 0; width: 90%; max-width: 800px; }
-    #reviews-list .review { border-bottom: 1px solid #ddd; padding: 0.5rem 0; }
-    #reviews-list .review:last-child { border-bottom: none; }
-    .btn { background: #a0eab2; border: none; border-radius: 4px; padding: 0.5rem 1rem; cursor: pointer; color: #000; }
-    .btn:hover { filter: brightness(0.9); }
+    /* Reset base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html { height: 100%; }
+
+    /* Font & colori */
+    body {
+      display: flex;
+      flex-direction: column;
+      background: #f0fff0;
+      font-family: Georgia, serif;
+      color: #222;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: #e0f5e0;
+    }
+    #logo { height: 40px; margin-right: 1rem; }
+    #title { font-size: 1.5rem; font-weight: bold; }
+
+    /* Libro digitale */
+    #book {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .page {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      padding: 2rem;
+      background: rgba(255,255,255,0.9);
+      overflow-y: auto;
+    }
+    .page.active { display: block; }
+    .page h2 { margin-bottom: 1rem; }
+
+    /* Controlli di navigazione */
+    #controls {
+      text-align: center;
+      padding: 1rem;
+      background: #e0f5e0;
+    }
+    .btn {
+      background: #a0eab2;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: default;
+    }
+
+    /* Contatore visite */
+    #visit-counter {
+      text-align: center;
+      padding: 0.5rem;
+      background: #e0f5e0;
+      font-size: 0.9rem;
+    }
+
+    /* Sezione recensioni */
+    #reviews {
+      background: #fff;
+      padding: 1rem;
+      border-top: 1px solid #ddd;
+    }
+    #reviews h3 {
+      margin-bottom: 1rem;
+    }
+    #reviews-list .review {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    #review-form input,
+    #review-form textarea {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    #review-form button {
+      display: inline-block;
+      background: #a0eab2;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <img id="cover" src="cover.png" alt="Copertina di Neon" />
-    <div id="prompt">Clicca sulla copertina per aprire <strong>Neon - La luce sporca della verità</strong></div>
+    <img id="logo" src="goblin.png" alt="Logo Goblin Infame">
+    <div id="title">Neon - La luce sporca della verità</div>
   </header>
 
-  <section id="story" class="panel"></section>
-  <button id="play-btn" style="display:none;">▶️ Ascolta la storia</button>
-  <button id="share-btn" style="display:none;">📲 Condividi</button>
-  <div id="visit-counter"></div>
+  <!-- Libro digitale a pagine -->
+  <div id="book">
+    <div class="page active" id="page-1">
+      <h2>Capitolo 1 – Introduzione</h2>
+      <p>In un futuro dove il cielo è squarciato da rovine celesti, Bologna si erge come guardiana di un segreto. Riven, sopravvissuto tra le macerie, raccoglie speranza dove sembra non essercene più.</p>
+      <img src="chapter.png" alt="Illustrazione Capitolo 1">
+    </div>
+    <div class="page" id="page-2">
+      <h2>Capitolo 1 – Il Silenzio</h2>
+      <p>Mi chiamo Riven. Bologna è un relitto di macerie e cenere, ma è ancora in piedi, come me. Un asteroide ha rivelato il volto crudele dell’universo, scaraventando fuoco e polvere sui nostri cuori.</p>
+      <p>Le strade, un tempo fiumi di vita, sono ora crepe profonde di disperazione. Il cielo brilla di un arancione avvelenato, e ogni respiro è un atto di ribellione contro il destino.</p>
+    </div>
+    <div class="page" id="page-3">
+      <h2>Capitolo 1 – Resistere è Amore</h2>
+      <p>Resistere è un atto di amore. Ogni seme che spunta, ogni parola sussurrata, sfida l’oblio e infonde vita nel domani. Riven troverà la forza di proteggere ciò che ama, perché finché esiste un cuore che batte, c’è speranza.</p>
+    </div>
+  </div>
 
-  <section id="reviews-section" class="panel">
-    <h2>Lascia la tua recensione</h2>
+  <!-- Controlli navigazione -->
+  <div id="controls">
+    <button id="prev-btn" class="btn" disabled>« Precedente</button>
+    <button id="next-btn" class="btn">Successivo »</button>
+    <button id="share-btn" class="btn">📲 Condividi</button>
+  </div>
+
+  <!-- Contatore visite -->
+  <div id="visit-counter">Visite totali: <span id="counter">0</span></div>
+
+  <!-- Sezione recensioni -->
+  <section id="reviews">
+    <h3>Recensioni</h3>
     <div id="reviews-list"></div>
     <form id="review-form">
-      <input type="text" id="reviewer" placeholder="Il tuo nome" required style="width:100%;padding:0.5rem;margin:0.5rem 0;" />
-      <textarea id="review-text" rows="3" placeholder="Scrivi la recensione..." required style="width:100%;padding:0.5rem;"></textarea>
-      <button type="submit" class="btn">Invia</button>
+      <input type="text" id="reviewer" placeholder="Il tuo nome" required>
+      <textarea id="review-text" rows="3" placeholder="La tua recensione..." required></textarea>
+      <button type="submit">Invia</button>
     </form>
   </section>
 
-  <footer>&copy; 2025 A.A.</footer>
-
   <script>
-    // Testo pagine
-    const pagesText = [
-      `Neon - La luce sporca della verità<br>Autore: A.A.<br><strong>Capitolo 1 – Il Silenzio</strong>`,
-      `Mi chiamo Riven. Sono a Bologna, una città ferita ma in piedi, come me...`,
-      `Le vie un tempo brulicanti ora sono crepe di disperazione...`,
-      `Dieci anni fa, il destino ha voltato le spalle all’umanità...`,
-      `In questo cielo incandescente, ho imparato che resistere è un atto di amore...`
-    ];
+    // Navigazione pagine
+    const pages = document.querySelectorAll('.page');
     let current = 0;
-    const cover = document.getElementById('cover');
-    const prompt = document.getElementById('prompt');
-    const story = document.getElementById('story');
-    const playBtn = document.getElementById('play-btn');
-    const shareBtn = document.getElementById('share-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
 
-    // Contatore visite globale in localStorage
-    function renderCounter() {
-      let count = parseInt(localStorage.getItem('visitCount') || '0', 10);
-      count++;
-      localStorage.setItem('visitCount', count);
-      document.getElementById('visit-counter').textContent = `Visite totali: ${count}`;
+    prevBtn.addEventListener('click', () => {
+      if (current > 0) {
+        pages[current].classList.remove('active');
+        current--;
+        pages[current].classList.add('active');
+        nextBtn.disabled = false;
+        if (current === 0) prevBtn.disabled = true;
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (current < pages.length - 1) {
+        pages[current].classList.remove('active');
+        current++;
+        pages[current].classList.add('active');
+        prevBtn.disabled = false;
+        if (current === pages.length - 1) nextBtn.disabled = true;
+      }
+    });
+
+    // Contatore visite
+    const counterEl = document.getElementById('counter');
+    let count = parseInt(localStorage.getItem('visitCount') || '0', 10);
+    count++;
+    localStorage.setItem('visitCount', count);
+    counterEl.textContent = count;
+
+    // Recensioni in localStorage
+    function getReviews() {
+      return JSON.parse(localStorage.getItem('reviews') || '[]');
     }
-    renderCounter();
-
-    // Recensioni in locale
-    function getReviews() { return JSON.parse(localStorage.getItem('reviews') || '[]'); }
-    function saveReviews(list) { localStorage.setItem('reviews', JSON.stringify(list)); }
+    function saveReviews(list) {
+      localStorage.setItem('reviews', JSON.stringify(list));
+    }
     function renderReviews() {
-      const container = document.getElementById('reviews-list'); container.innerHTML = '';
+      const container = document.getElementById('reviews-list');
+      container.innerHTML = '';
       getReviews().forEach(r => {
-        const div = document.createElement('div'); div.className = 'review';
+        const div = document.createElement('div');
+        div.className = 'review';
         div.innerHTML = `<strong>${r.name}</strong> <em>(${r.date})</em><p>${r.text}</p>`;
         container.appendChild(div);
       });
     }
     renderReviews();
+
     document.getElementById('review-form').addEventListener('submit', e => {
       e.preventDefault();
       const name = document.getElementById('reviewer').value.trim();
       const text = document.getElementById('review-text').value.trim();
       if (name && text) {
-        const reviews = getReviews(); reviews.unshift({ name, text, date: new Date().toLocaleString() });
-        saveReviews(reviews); renderReviews(); e.target.reset();
+        const reviews = getReviews();
+        reviews.unshift({ name, text, date: new Date().toLocaleString() });
+        saveReviews(reviews);
+        renderReviews();
+        e.target.reset();
       }
     });
 
-    // Click copertina -> mostra pagine
-    cover.addEventListener('click', () => {
-      cover.style.display = 'none'; prompt.style.display = 'none'; story.style.display = 'block';
-      playBtn.style.display = 'inline-block'; shareBtn.style.display = 'inline-block';
-      story.innerHTML = `<p>${pagesText[0]}</p>`;
-      const interval = setInterval(() => {
-        current++;
-        if (current < pagesText.length) {
-          story.innerHTML = `<p>${pagesText[current]}</p>`;
-        } else clearInterval(interval);
-      }, 4000);
-    });
-
-    // Sintesi vocale con voce italiana preferita
-    function selectVoice() {
-      const voices = speechSynthesis.getVoices().filter(v => v.lang === 'it-IT');
-      return voices.find(v => /female|Femminile/i.test(v.name)) || voices[0];
-    }
-    playBtn.addEventListener('click', () => {
-      speechSynthesis.cancel(); playBtn.disabled = true;
-      const utterance = new SpeechSynthesisUtterance(pagesText.join(' '));
-      utterance.lang = 'it-IT'; utterance.voice = selectVoice();
-      utterance.rate = 1; utterance.pitch = 1;
-      utterance.onend = () => { playBtn.disabled = false; };
-      speechSynthesis.speak(utterance);
-    });
-
-    // Condivisione social via Web Share API
-    shareBtn.addEventListener('click', () => {
+    // Web Share API
+    document.getElementById('share-btn').addEventListener('click', () => {
       if (navigator.share) {
         navigator.share({ title: document.title, url: window.location.href });
       } else {
-        alert('La condivisione non è supportata sul tuo dispositivo.');
+        alert('Condivisione non supportata dal tuo browser.');
       }
     });
   </script>
