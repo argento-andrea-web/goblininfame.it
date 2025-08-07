@@ -1,63 +1,243 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goblin Infame</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neon - La luce sporca della verità</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M69PVBECK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5M69PVBECK');
+  </script>
+
   <style>
+    /* Reset base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html { height: 100%; }
+
+    /* Font & colori */
     body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background-color: #0f0; /* verde */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      color: #000;
-    }
-    .container {
-      display: flex;
-      align-items: center;
-      max-width: 90%;
-    }
-    .container img {
-      max-width: 40vw;
-      height: auto;
-      border: 4px solid #444;
-      border-radius: 10px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-    }
-    .text {
-      margin-left: 2rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      height: 40vh;
+      background: #f0fff0;
+      font-family: Georgia, serif;
+      color: #222;
     }
-    .text h1 {
-      font-size: 3rem;
-      margin: 0;
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: #e0f5e0;
     }
-    .text p {
-      font-size: 1.5rem;
-      font-style: italic;
-      margin: 1rem 0;
+    #logo { height: 40px; margin-right: 1rem; }
+    #title { font-size: 1.5rem; font-weight: bold; }
+
+    /* Libro digitale */
+    #book {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
     }
-    .signature {
+    .page {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      padding: 2rem;
+      background: rgba(255,255,255,0.9);
+      overflow-y: auto;
+    }
+    .page.active { display: block; }
+    .page h2 { margin-bottom: 1rem; }
+
+    /* Controlli di navigazione */
+    #controls {
+      text-align: center;
+      padding: 1rem;
+      background: #e0f5e0;
+    }
+    .btn {
+      background: #a0eab2;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
       font-size: 1rem;
-      text-align: right;
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: default;
+    }
+
+    /* Contatore visite */
+    #visit-counter {
+      text-align: center;
+      padding: 0.5rem;
+      background: #e0f5e0;
+      font-size: 0.9rem;
+    }
+
+    /* Sezione recensioni */
+    #reviews {
+      background: #fff;
+      padding: 1rem;
+      border-top: 1px solid #ddd;
+    }
+    #reviews h3 {
+      margin-bottom: 1rem;
+    }
+    #reviews-list .review {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    #review-form input,
+    #review-form textarea {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    #review-form button {
+      display: inline-block;
+      background: #a0eab2;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="goblin.png" alt="Goblin Infame" />
-    <div class="text">
-      <h1>Goblin Infame</h1>
-      <div class="signature">A.A.</div>
-      <p>“In ogni ombra risplende una speranza: tutto è possibile.”</p>
+
+  <!-- Header -->
+  <header>
+    <img id="logo" src="goblin.png" alt="Logo Goblin Infame">
+    <div id="title">Neon - La luce sporca della verità</div>
+  </header>
+
+  <!-- Libro digitale a pagine -->
+  <div id="book">
+    <div class="page active" id="page-1">
+      <h2>Capitolo 1 – Introduzione</h2>
+      <p>In un futuro dove il cielo è squarciato da rovine celesti, Bologna si erge come guardiana di un segreto. Riven, sopravvissuto tra le macerie, raccoglie speranza dove sembra non essercene più.</p>
+      <img src="chapter.png" alt="Illustrazione Capitolo 1">
+    </div>
+    <div class="page" id="page-2">
+      <h2>Capitolo 1 – Il Silenzio</h2>
+      <p>Mi chiamo Riven. Bologna è un relitto di macerie e cenere, ma è ancora in piedi, come me. Un asteroide ha rivelato il volto crudele dell’universo, scaraventando fuoco e polvere sui nostri cuori.</p>
+      <p>Le strade, un tempo fiumi di vita, sono ora crepe profonde di disperazione. Il cielo brilla di un arancione avvelenato, e ogni respiro è un atto di ribellione contro il destino.</p>
+    </div>
+    <div class="page" id="page-3">
+      <h2>Capitolo 1 – Resistere è Amore</h2>
+      <p>Resistere è un atto di amore. Ogni seme che spunta, ogni parola sussurrata, sfida l’oblio e infonde vita nel domani. Riven troverà la forza di proteggere ciò che ama, perché finché esiste un cuore che batte, c’è speranza.</p>
     </div>
   </div>
+
+  <!-- Controlli navigazione -->
+  <div id="controls">
+    <button id="prev-btn" class="btn" disabled>« Precedente</button>
+    <button id="next-btn" class="btn">Successivo »</button>
+    <button id="share-btn" class="btn">📲 Condividi</button>
+  </div>
+
+  <!-- Contatore visite -->
+  <div id="visit-counter">Visite totali: <span id="counter">0</span></div>
+
+  <!-- Sezione recensioni -->
+  <section id="reviews">
+    <h3>Recensioni</h3>
+    <div id="reviews-list"></div>
+    <form id="review-form">
+      <input type="text" id="reviewer" placeholder="Il tuo nome" required>
+      <textarea id="review-text" rows="3" placeholder="La tua recensione..." required></textarea>
+      <button type="submit">Invia</button>
+    </form>
+  </section>
+
+  <script>
+    // Navigazione pagine
+    const pages = document.querySelectorAll('.page');
+    let current = 0;
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    prevBtn.addEventListener('click', () => {
+      if (current > 0) {
+        pages[current].classList.remove('active');
+        current--;
+        pages[current].classList.add('active');
+        nextBtn.disabled = false;
+        if (current === 0) prevBtn.disabled = true;
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (current < pages.length - 1) {
+        pages[current].classList.remove('active');
+        current++;
+        pages[current].classList.add('active');
+        prevBtn.disabled = false;
+        if (current === pages.length - 1) nextBtn.disabled = true;
+      }
+    });
+
+    // Contatore visite
+    const counterEl = document.getElementById('counter');
+    let count = parseInt(localStorage.getItem('visitCount') || '0', 10);
+    count++;
+    localStorage.setItem('visitCount', count);
+    counterEl.textContent = count;
+
+    // Recensioni in localStorage
+    function getReviews() {
+      return JSON.parse(localStorage.getItem('reviews') || '[]');
+    }
+    function saveReviews(list) {
+      localStorage.setItem('reviews', JSON.stringify(list));
+    }
+    function renderReviews() {
+      const container = document.getElementById('reviews-list');
+      container.innerHTML = '';
+      getReviews().forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'review';
+        div.innerHTML = `<strong>${r.name}</strong> <em>(${r.date})</em><p>${r.text}</p>`;
+        container.appendChild(div);
+      });
+    }
+    renderReviews();
+
+    document.getElementById('review-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('reviewer').value.trim();
+      const text = document.getElementById('review-text').value.trim();
+      if (name && text) {
+        const reviews = getReviews();
+        reviews.unshift({ name, text, date: new Date().toLocaleString() });
+        saveReviews(reviews);
+        renderReviews();
+        e.target.reset();
+      }
+    });
+
+    // Web Share API
+    document.getElementById('share-btn').addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: window.location.href });
+      } else {
+        alert('Condivisione non supportata dal tuo browser.');
+      }
+    });
+  </script>
 </body>
 </html>
